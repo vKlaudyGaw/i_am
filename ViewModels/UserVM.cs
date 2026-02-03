@@ -57,7 +57,7 @@ namespace i_am.ViewModels
 
             if (CurrentUser != null)
             {
-                await Shell.Current.GoToAsync("//HomePage");
+                await Shell.Current.GoToAsync("HomePage");
             }
             else
             {
@@ -82,7 +82,7 @@ namespace i_am.ViewModels
             await firestoreService.InsertUser(newUser);
             CurrentUser = await firestoreService.GetUserByEmail(Email);
 
-            await Shell.Current.GoToAsync("//HomePage");
+            await Shell.Current.GoToAsync("HomePage");
         }
 
         [RelayCommand]
