@@ -9,13 +9,10 @@ namespace i_am
         public AppShell()
         {
             InitializeComponent();
-            //var currentTheme = Application.Current!.RequestedTheme;
-            //ThemeSegmentedControl.SelectedIndex = currentTheme == AppTheme.Light ? 0 : 1;
 
-            // Rejestracja tras
-            Routing.RegisterRoute(nameof(Views.LoginPage), typeof(Views.LoginPage));
-            Routing.RegisterRoute(nameof(Views.RegisterPage), typeof(Views.RegisterPage));
+            // Rejestracja tras 
             Routing.RegisterRoute(nameof(Views.HomePage), typeof(Views.HomePage));
+            Routing.RegisterRoute(nameof(Views.RegisterPage), typeof(Views.RegisterPage));
             Routing.RegisterRoute(nameof(Views.CheckInPage), typeof(Views.CheckInPage));
             Routing.RegisterRoute(nameof(Views.InvitationsPage), typeof(Views.InvitationsPage));
             Routing.RegisterRoute(nameof(Views.RelationshipsPage), typeof(Views.RelationshipsPage));
