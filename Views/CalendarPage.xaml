@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:i_am.ViewModels"
+             xmlns:models="clr-namespace:i_am.Models"
+             x:Class="i_am.Views.CalendarPage"
+             x:DataType="vm:CalendarVM"
+             Title="Kalendarz">
+
+    <Grid RowDefinitions="Auto,*" Padding="20">
+
+        <!-- Nawigacja miesiąca -->
+        <Frame Grid.Row="0" Padding="10" CornerRadius="10" Margin="0,0,0,20">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Button Grid.Column="0"
+                        Text="Poprzedni"
+                        Command="{Binding PreviousMonthCommand}"
+                        WidthRequest="100" />
+
+                <Label Grid.Column="1"
+                       Text="{Binding DisplayMonth}"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       HorizontalTextAlignment="Center"
+                       VerticalOptions="Center" />
+
+                <Button Grid.Column="2"
+                        Text="Nastepny"
+                        Command="{Binding NextMonthCommand}"
+                        WidthRequest="100" />
+            </Grid>
+        </Frame>
+
+        <!-- Lista check-inów -->
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding MonthCheckIns}"
+                        EmptyView="Brak danych dla tego miesiaca">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:DailyCheckIn">
+                    <Frame Margin="0,0,0,10" Padding="15" CornerRadius="8">
+                        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+
+                            <!-- Ikona statusu -->
+                            <Frame Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
+                                   WidthRequest="50" HeightRequest="50"
+                                   CornerRadius="25"
+                                   Padding="0"
+                                   BackgroundColor="{Binding TotalScore, Converter={StaticResource ScoreToColorConverter}}"
+                                   Margin="0,0,15,0">
+                                <Label Text="{Binding TotalScore}"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="White" />
+                            </Frame>
+
+                            <!-- Data -->
+                            <Label Grid.Row="0" Grid.Column="1"
+                                   Text="{Binding Date, StringFormat='{0:d MMMM}'}"
+                                   FontSize="16"
+                                   FontAttributes="Bold" />
+
+                            <!-- Status -->
+                            <Label Grid.Row="1" Grid.Column="1"
+                                   Text="{Binding IsCompleted, Converter={StaticResource BoolToStatusConverter}}"
+                                   FontSize="12"
+                                   TextColor="Gray" />
+
+                            <!-- Godzina ukończenia -->
+                            <Label Grid.Row="0" Grid.RowSpan="2" Grid.Column="2"
+                                   Text="{Binding CompletedAt, StringFormat='{0:HH:mm}'}"
+                                   VerticalOptions="Center"
+                                   FontSize="14"
+                                   TextColor="Gray" />
+
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </Grid>
+
+</ContentPage>

@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:i_am.ViewModels"
+             xmlns:models="clr-namespace:i_am.Models"
+             x:Class="i_am.Views.InvitationsPage"
+             x:DataType="vm:InvitationVM"
+             Title="Zaproszenia">
+
+    <Grid RowDefinitions="Auto,*" Padding="20">
+
+        <!-- Wysyłanie zaproszenia -->
+        <Frame Grid.Row="0" Padding="15" CornerRadius="10" Margin="0,0,0,20">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Wyslij zaproszenie" FontSize="18" FontAttributes="Bold" />
+                <Entry Placeholder="Wpisz email osoby"
+                       Text="{Binding RecipientEmail}"
+                       Keyboard="Email" />
+                <Button Text="Wyslij zaproszenie"
+                        Command="{Binding SendInvitationCommand}" />
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Lista oczekujących zaproszeń -->
+        <VerticalStackLayout Grid.Row="1">
+            <Label Text="Oczekujace zaproszenia" 
+                   FontSize="18" 
+                   FontAttributes="Bold"
+                   Margin="0,0,0,10" />
+
+            <CollectionView ItemsSource="{Binding PendingInvitations}"
+                            EmptyView="Brak oczekujacych zaproszen">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Invitation">
+                        <Frame Margin="0,0,0,10" Padding="15" CornerRadius="8">
+                            <Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto">
+                                
+                                <Label Grid.Row="0" Grid.Column="0"
+                                       Text="{Binding SenderName}"
+                                       FontSize="16"
+                                       FontAttributes="Bold" />
+                                
+                                <Label Grid.Row="1" Grid.Column="0"
+                                       Text="{Binding SenderIsCaregiver, Converter={StaticResource BoolToInviteTypeConverter}}"
+                                       FontSize="12"
+                                       TextColor="Gray" />
+
+                                <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"
+                                        Text="Tak"
+                                        BackgroundColor="Green"
+                                        TextColor="White"
+                                        WidthRequest="60"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InvitationVM}}, Path=AcceptInvitationCommand}"
+                                        CommandParameter="{Binding .}" />
+
+                                <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="2"
+                                        Text="Nie"
+                                        BackgroundColor="Red"
+                                        TextColor="White"
+                                        WidthRequest="60"
+                                        Margin="10,0,0,0"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InvitationVM}}, Path=RejectInvitationCommand}"
+                                        CommandParameter="{Binding .}" />
+
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+
+    </Grid>
+
+</ContentPage>

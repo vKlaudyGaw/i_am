@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:i_am.ViewModels"
+             x:Class="i_am.Views.HomePage"
+             x:DataType="vm:UserVM"
+             Title="Strona główna">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <Frame BackgroundColor="{StaticResource Primary}" Padding="20" CornerRadius="10">
+                <VerticalStackLayout>
+                    <Label Text="{Binding CurrentUser.Username, StringFormat='Witaj, {0}!'}"
+                           FontSize="24"
+                           TextColor="White"
+                           FontAttributes="Bold" />
+                    <Label Text="{Binding CurrentUser.IsCaregiver, Converter={StaticResource BoolToRoleConverter}}"
+                           TextColor="White"
+                           FontSize="14" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Dla podopiecznego -->
+            <VerticalStackLayout Spacing="15" IsVisible="{Binding CurrentUser.IsDependent}">
+
+                <Button Text="📝 Wypełnij dzisiejsze pytania"
+                        Command="{Binding GoToCheckInCommand}"
+                        HeightRequest="60"
+                        FontSize="18" />
+
+                <Button Text="🆘 Potrzebuję pomocy"
+                        Command="{Binding SendHelpAlertCommand}"
+                        BackgroundColor="Red"
+                        TextColor="White"
+                        HeightRequest="60"
+                        FontSize="18" />
+
+                <Button Text="📅 Mój kalendarz"
+                        Command="{Binding GoToCalendarCommand}"
+                        HeightRequest="60" />
+
+            </VerticalStackLayout>
+
+            <!-- Dla opiekuna -->
+            <VerticalStackLayout Spacing="15" IsVisible="{Binding CurrentUser.IsCaregiver}">
+
+                <Button Text="👥 Moi podopieczni"
+                        Command="{Binding GoToRelationshipsCommand}"
+                        HeightRequest="60"
+                        FontSize="18" />
+
+                <Button Text="📅 Przeglądaj kalendarze"
+                        Command="{Binding GoToCalendarCommand}"
+                        HeightRequest="60" />
+
+            </VerticalStackLayout>
+
+            <!-- Wspólne -->
+            <Button Text="✉️ Zaproszenia"
+                    Command="{Binding GoToInvitationsCommand}"
+                    HeightRequest="50" />
+
+            <Button Text="⚙️ Ustawienia"
+                    Command="{Binding GoToSettingsCommand}"
+                    BackgroundColor="Gray"
+                    HeightRequest="50" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
