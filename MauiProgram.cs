@@ -66,9 +66,6 @@ namespace i_am
             builder.Services.AddTransient<CalendarVM>();
 
             // Pages
-            builder.Services.AddTransient<LoginPage>();
-            builder.Services.AddTransient<RegisterPage>();
-            builder.Services.AddTransient<HomePage>();
             builder.Services.AddTransient<CheckInPage>();
             builder.Services.AddTransient<InvitationsPage>();
             builder.Services.AddTransient<RelationshipsPage>();

@@ -12,7 +12,6 @@ namespace i_am
 
             // Rejestracja tras 
             Routing.RegisterRoute(nameof(Pages.HomePage), typeof(Pages.HomePage));
-            Routing.RegisterRoute(nameof(Pages.RegisterPage), typeof(Pages.RegisterPage));
             Routing.RegisterRoute(nameof(Pages.CheckInPage), typeof(Pages.CheckInPage));
             Routing.RegisterRoute(nameof(Pages.InvitationsPage), typeof(Pages.InvitationsPage));
             Routing.RegisterRoute(nameof(Pages.RelationshipsPage), typeof(Pages.RelationshipsPage));

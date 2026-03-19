@@ -9,7 +9,7 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15" VerticalOptions="Center">
             
-            <Label Text="Witaj ponownie!" 
+            <Label Text="Witaj w I AM!" 
                    FontSize="28" 
                    FontAttributes="Bold"
                    HorizontalOptions="Center"
