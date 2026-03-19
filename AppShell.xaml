@@ -3,12 +3,24 @@
     x:Class="i_am.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:views="clr-namespace:i_am.Views"
+    xmlns:pages="clr-namespace:i_am.Pages"
     Shell.FlyoutBehavior="Disabled">
 
+    <!-- Strony autoryzacji -->
     <ShellContent
-        Title="Login"
-        ContentTemplate="{DataTemplate views:LoginPage}"
-        Route="LoginPage" />
+        Title="Logowanie"
+        ContentTemplate="{DataTemplate pages:SignInView}"
+        Route="SignIn" />
+    
+    <ShellContent
+        Title="Rejestracja"
+        ContentTemplate="{DataTemplate pages:SignUpView}"
+        Route="SignUp" />
+
+    <!-- Strona główna (po zalogowaniu) -->
+    <ShellContent
+        Title="Strona główna"
+        ContentTemplate="{DataTemplate pages:HomePage}"
+        Route="HomePage" />
 
 </Shell>

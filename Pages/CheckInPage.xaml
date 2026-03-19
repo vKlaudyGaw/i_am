@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:i_am.ViewModels"
              xmlns:models="clr-namespace:i_am.Models"
-             x:Class="i_am.Views.CheckInPage"
+             x:Class="i_am.Pages.CheckInPage"
              x:DataType="vm:CheckInVM"
              Title="Codzienne pytania">
 

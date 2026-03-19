@@ -1,12 +1,12 @@
 using i_am.ViewModels;
 
-namespace i_am.Views
+namespace i_am.Pages
 {
-    public partial class RelationshipsPage : ContentPage
+    public partial class CalendarPage : ContentPage
     {
-        private readonly RelationshipVM viewModel;
+        private readonly CalendarVM viewModel;
 
-        public RelationshipsPage(RelationshipVM vm)
+        public CalendarPage(CalendarVM vm)
         {
             InitializeComponent();
             viewModel = vm;
@@ -16,7 +16,7 @@ namespace i_am.Views
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await viewModel.LoadRelationshipsCommand.ExecuteAsync(null);
+            await viewModel.LoadMonthDataCommand.ExecuteAsync(null);
         }
     }
 }

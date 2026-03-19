@@ -1,7 +1,7 @@
 using i_am.Models;
 using i_am.ViewModels;
 
-namespace i_am.Views
+namespace i_am.Pages
 {
     public partial class CheckInPage : ContentPage
     {

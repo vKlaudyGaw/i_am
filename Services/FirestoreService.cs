@@ -106,22 +106,29 @@ namespace i_am.Services
             await SetupFirestore();
             await db.Collection("Users").Document(user.Id).SetAsync(user);
         }
+
+        public async Task InsertUserWithId(User user)
+        {
+            await SetupFirestore();
+            await db!.Collection("Users").Document(user.Id).SetAsync(user);
+        }
         #endregion
 
         #region Invitations
         public async Task InsertInvitation(Invitation invitation)
         {
             await SetupFirestore();
-            await db.Collection("Invitations").AddAsync(invitation);
+            await db!.Collection("Invitations").AddAsync(invitation);
         }
 
         public async Task<List<Invitation>> GetPendingInvitations(string recipientId)
         {
             await SetupFirestore();
-            var data = await db.Collection("Invitations")
+            var data = await db!.Collection("Invitations")
                 .WhereEqualTo("RecipientId", recipientId)
                 .WhereEqualTo("IsAccepted", null)
                 .GetSnapshotAsync();
+            
             return data.Documents
                 .Select(doc =>
                 {
@@ -134,8 +141,13 @@ namespace i_am.Services
 
         public async Task UpdateInvitation(Invitation invitation)
         {
+            if (string.IsNullOrEmpty(invitation.Id))
+            {
+                throw new ArgumentException("Invitation.Id cannot be null or empty");
+            }
+            
             await SetupFirestore();
-            await db.Collection("Invitations").Document(invitation.Id).SetAsync(invitation);
+            await db!.Collection("Invitations").Document(invitation.Id).SetAsync(invitation);
         }
         #endregion
 
@@ -143,7 +155,9 @@ namespace i_am.Services
         public async Task InsertRelationship(CareRelationship relationship)
         {
             await SetupFirestore();
-            await db.Collection("Relationships").AddAsync(relationship);
+            var docRef = db!.Collection("Relationships").Document();
+            relationship.Id = docRef.Id;
+            await docRef.SetAsync(relationship);
         }
 
         public async Task<List<CareRelationship>> GetRelationships(string userId, bool isCaregiver)

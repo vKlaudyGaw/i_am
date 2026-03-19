@@ -5,7 +5,6 @@ namespace i_am.Models
     [FirestoreData]
     public class CareRelationship
     {
-        [FirestoreProperty]
         public string? Id { get; set; }
 
         [FirestoreProperty]
@@ -19,5 +18,8 @@ namespace i_am.Models
 
         [FirestoreProperty]
         public DateTime CreatedAt { get; set; }
+
+        public string? DependentName { get; set; }
+        public string? CaregiverName { get; set; }
     }
 }

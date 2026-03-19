@@ -5,7 +5,6 @@ namespace i_am.Models
     [FirestoreData]
     public class Invitation
     {
-        [FirestoreProperty]
         public string? Id { get; set; }
 
         [FirestoreProperty]
@@ -13,6 +12,9 @@ namespace i_am.Models
 
         [FirestoreProperty]
         public string? SenderName { get; set; }
+
+        [FirestoreProperty]
+        public string? SenderEmail { get; set; }
 
         [FirestoreProperty]
         public string? RecipientEmail { get; set; }
@@ -31,5 +33,9 @@ namespace i_am.Models
 
         public bool IsPending => IsAccepted == null;
         public bool IsRejected => IsAccepted == false;
+
+        public string InviteTypeText => SenderIsCaregiver 
+            ? "Chce zostaæ Twoim opiekunem" 
+            : "Chce, ¿ebyœ zosta³ jego opiekunem";
     }
 }

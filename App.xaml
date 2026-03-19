@@ -1,15 +1,20 @@
-﻿<?xml version = "1.0" encoding = "utf-8" ?>
+﻿<?xml version = "1.0" encoding = "UTF-8" ?>
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:i_am"
+             xmlns:converters="clr-namespace:i_am.Converters"
              x:Class="i_am.App">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
-                <ResourceDictionary Source="Resources/Styles/AppStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
+            <!-- Converters -->
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+            <converters:StringToBoolConverter x:Key="StringToBoolConverter" />
+            <converters:BoolToRoleConverter x:Key="BoolToRoleConverter" />
+            <converters:BoolToInviteTypeConverter x:Key="BoolToInviteTypeConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

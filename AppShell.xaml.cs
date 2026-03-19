@@ -11,12 +11,12 @@ namespace i_am
             InitializeComponent();
 
             // Rejestracja tras 
-            Routing.RegisterRoute(nameof(Views.HomePage), typeof(Views.HomePage));
-            Routing.RegisterRoute(nameof(Views.RegisterPage), typeof(Views.RegisterPage));
-            Routing.RegisterRoute(nameof(Views.CheckInPage), typeof(Views.CheckInPage));
-            Routing.RegisterRoute(nameof(Views.InvitationsPage), typeof(Views.InvitationsPage));
-            Routing.RegisterRoute(nameof(Views.RelationshipsPage), typeof(Views.RelationshipsPage));
-            Routing.RegisterRoute(nameof(Views.CalendarPage), typeof(Views.CalendarPage));
+            Routing.RegisterRoute(nameof(Pages.HomePage), typeof(Pages.HomePage));
+            Routing.RegisterRoute(nameof(Pages.RegisterPage), typeof(Pages.RegisterPage));
+            Routing.RegisterRoute(nameof(Pages.CheckInPage), typeof(Pages.CheckInPage));
+            Routing.RegisterRoute(nameof(Pages.InvitationsPage), typeof(Pages.InvitationsPage));
+            Routing.RegisterRoute(nameof(Pages.RelationshipsPage), typeof(Pages.RelationshipsPage));
+            Routing.RegisterRoute(nameof(Pages.CalendarPage), typeof(Pages.CalendarPage));
         }
         public static async Task DisplaySnackbarAsync(string message)
         {

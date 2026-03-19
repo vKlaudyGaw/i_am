@@ -8,37 +8,52 @@ namespace i_am.ViewModels
 {
     public partial class RelationshipVM : ObservableObject
     {
-        private readonly FirestoreService firestoreService;
+        private readonly FirestoreService _firestoreService;
+        private readonly AuthService _authService;
 
-        public ObservableCollection<CareRelationship> Relationships { get; set; } = [];
-
-        [ObservableProperty]
-        private string currentUserId;
-
-        [ObservableProperty]
-        private bool isCaregiver;
-
-        [ObservableProperty]
-        private CareRelationship selectedRelationship;
+        public ObservableCollection<CareRelationship> Relationships { get; } = [];
 
         [ObservableProperty]
         private TimeSpan newCheckInTime;
 
-        public RelationshipVM(FirestoreService firestoreService)
+        [ObservableProperty]
+        private bool isLoading;
+
+        public RelationshipVM(FirestoreService firestoreService, AuthService authService)
         {
-            this.firestoreService = firestoreService;
+            _firestoreService = firestoreService;
+            _authService = authService;
             NewCheckInTime = new TimeSpan(20, 0, 0);
         }
 
         [RelayCommand]
         public async Task LoadRelationships()
         {
+            var currentUser = await _authService.GetCurrentUserAsync();
+            if (currentUser?.Id == null) return;
+
+            IsLoading = true;
             Relationships.Clear();
-            var relationships = await firestoreService.GetRelationships(CurrentUserId, IsCaregiver);
+
+            var relationships = await _firestoreService.GetRelationships(currentUser.Id, currentUser.IsCaregiver);
+            
             foreach (var relationship in relationships)
             {
+                if (currentUser.IsCaregiver)
+                {
+                    var dependent = await _firestoreService.GetUserById(relationship.DependentId!);
+                    relationship.DependentName = dependent?.Username ?? "Nieznany";
+                }
+                else
+                {
+                    var caregiver = await _firestoreService.GetUserById(relationship.CaregiverId!);
+                    relationship.CaregiverName = caregiver?.Username ?? "Nieznany";
+                }
+                
                 Relationships.Add(relationship);
             }
+
+            IsLoading = false;
         }
 
         [RelayCommand]
@@ -47,19 +62,17 @@ namespace i_am.ViewModels
             if (relationship == null) return;
 
             relationship.CheckInTime = NewCheckInTime;
-            await firestoreService.UpdateRelationship(relationship);
+            await _firestoreService.UpdateRelationship(relationship);
+
+            await Shell.Current.DisplayAlert("Sukces", "Godzina check-in zosta³a zmieniona", "OK");
         }
 
         [RelayCommand]
-        public async Task ViewCalendar(string dependentId)
+        public async Task ViewCalendar(string? dependentId)
         {
+            if (string.IsNullOrEmpty(dependentId)) return;
+            
             await Shell.Current.GoToAsync($"CalendarPage?dependentId={dependentId}");
-        }
-
-        public void SelectRelationship(CareRelationship relationship)
-        {
-            SelectedRelationship = relationship;
-            NewCheckInTime = relationship.CheckInTime;
         }
     }
 }

@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:i_am.ViewModels"
+             xmlns:models="clr-namespace:i_am.Models"
+             x:Class="i_am.Pages.RelationshipsPage"
+             x:DataType="vm:RelationshipVM"
+             Title="Moi podopieczni">
+
+    <Grid RowDefinitions="*,Auto" Padding="20">
+        
+        <CollectionView Grid.Row="0"
+                        ItemsSource="{Binding Relationships}"
+                        EmptyView="Nie masz jeszcze zadnych podopiecznych">
+            
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="5" />
+            </CollectionView.ItemsLayout>
+            
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:CareRelationship">
+                    <Frame Padding="15" CornerRadius="10" BorderColor="Transparent">
+                        <VerticalStackLayout Spacing="10">
+
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Grid.Column="0"
+                                       Text="{Binding DependentName}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       VerticalOptions="Center" />
+                                <Button Grid.Column="1"
+                                        Text="Kalendarz"
+                                        Clicked="OnViewCalendarClicked" />
+                            </Grid>
+
+                            <FlexLayout Wrap="Wrap" 
+                                        AlignItems="Center"
+                                        JustifyContent="Start">
+                                <Label Text="Codzienny check-in"
+                                       FontSize="14"
+                                       TextColor="Gray"
+                                       Margin="0,0,10,0" />
+                                <TimePicker Format="HH:mm" 
+                                            Time="{Binding CheckInTime}"
+                                            Margin="0,0,10,0"
+                                            PropertyChanged="OnTimePickerChanged"/>
+                                <Button Text="Zapisz zmiany"
+                                        FontSize="14"
+                                        Clicked="OnUpdateCheckInTimeClicked" />
+                            </FlexLayout>
+
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <ActivityIndicator Grid.Row="0"
+                           IsRunning="{Binding IsLoading}"
+                           IsVisible="{Binding IsLoading}"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" />
+
+    </Grid>
+
+</ContentPage>

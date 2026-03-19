@@ -1,10 +1,10 @@
 using i_am.ViewModels;
 
-namespace i_am.Views
+namespace i_am.Pages
 {
-    public partial class LoginPage : ContentPage
+    public partial class RegisterPage : ContentPage
     {
-        public LoginPage(UserVM vm)
+        public RegisterPage(UserVM vm)
         {
             InitializeComponent();
             BindingContext = vm;

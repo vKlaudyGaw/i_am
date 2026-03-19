@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:i_am.ViewModels"
              xmlns:models="clr-namespace:i_am.Models"
-             x:Class="i_am.Views.InvitationsPage"
+             x:Class="i_am.Pages.InvitationsPage"
              x:DataType="vm:InvitationVM"
              Title="Zaproszenia">
 
@@ -28,39 +28,44 @@
                    FontAttributes="Bold"
                    Margin="0,0,0,10" />
 
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               IsVisible="{Binding IsLoading}" />
+
             <CollectionView ItemsSource="{Binding PendingInvitations}"
                             EmptyView="Brak oczekujacych zaproszen">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Invitation">
                         <Frame Margin="0,0,0,10" Padding="15" CornerRadius="8">
                             <Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto">
-                                
+
                                 <Label Grid.Row="0" Grid.Column="0"
                                        Text="{Binding SenderName}"
                                        FontSize="16"
                                        FontAttributes="Bold" />
-                                
+
                                 <Label Grid.Row="1" Grid.Column="0"
-                                       Text="{Binding SenderIsCaregiver, Converter={StaticResource BoolToInviteTypeConverter}}"
+                                       Text="{Binding InviteTypeText}"
                                        FontSize="12"
                                        TextColor="Gray" />
 
                                 <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"
-                                        Text="Tak"
+                                        Text="✓"
                                         BackgroundColor="Green"
                                         TextColor="White"
-                                        WidthRequest="60"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InvitationVM}}, Path=AcceptInvitationCommand}"
-                                        CommandParameter="{Binding .}" />
+                                        WidthRequest="50"
+                                        HeightRequest="50"
+                                        CornerRadius="25"
+                                        Clicked="OnAcceptClicked" />
 
                                 <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="2"
-                                        Text="Nie"
+                                        Text="✗"
                                         BackgroundColor="Red"
                                         TextColor="White"
-                                        WidthRequest="60"
+                                        WidthRequest="50"
+                                        HeightRequest="50"
+                                        CornerRadius="25"
                                         Margin="10,0,0,0"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InvitationVM}}, Path=RejectInvitationCommand}"
-                                        CommandParameter="{Binding .}" />
+                                        Clicked="OnRejectClicked" />
 
                             </Grid>
                         </Frame>
