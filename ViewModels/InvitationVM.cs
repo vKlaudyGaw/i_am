@@ -36,11 +36,11 @@ namespace i_am.ViewModels
             PendingInvitations.Clear();
 
             var invitations = await _firestoreService.GetPendingInvitations(currentUser.Id);
-            Debug.WriteLine($"Loaded {invitations.Count} invitations");
             
             foreach (var invitation in invitations)
             {
-                Debug.WriteLine($"Invitation - Id: {invitation.Id}, Sender: {invitation.SenderName}");
+                // SprawdŸ czy ja wys³a³em to zaproszenie
+                invitation.IsSentByMe = invitation.SenderId == currentUser.Id;
                 PendingInvitations.Add(invitation);
             }
 
@@ -79,6 +79,26 @@ namespace i_am.ViewModels
                 return;
             }
 
+            var hasPendingInvitation = await _firestoreService.HasPendingInvitation(currentUser.Id!, recipient.Id!);
+            if (hasPendingInvitation)
+            {
+                await Shell.Current.DisplayAlert("B³¹d", "Istnieje ju¿ oczekuj¹ce zaproszenie miêdzy Tob¹ a tym u¿ytkownikiem", "OK");
+                return;
+            }
+
+            // SprawdŸ czy relacja ju¿ istnieje
+            var caregiverId = currentUser.IsCaregiver ? currentUser.Id : recipient.Id;
+            var dependentId = currentUser.IsCaregiver ? recipient.Id : currentUser.Id;
+
+            var existingRelationships = await _firestoreService.GetRelationships(caregiverId!, isCaregiver: true);
+            var relationshipExists = existingRelationships.Any(r => r.DependentId == dependentId);
+
+            if (relationshipExists)
+            {
+                await Shell.Current.DisplayAlert("B³¹d", "Relacja z tym u¿ytkownikiem ju¿ istnieje", "OK");
+                return;
+            }
+
             var invitation = new Invitation
             {
                 SenderId = currentUser.Id,
@@ -87,6 +107,7 @@ namespace i_am.ViewModels
                 SenderIsCaregiver = currentUser.IsCaregiver,
                 RecipientId = recipient.Id,
                 RecipientEmail = recipient.Email,
+                RecipientName = recipient.Username,
                 IsAccepted = null,
                 CreatedAt = DateTime.UtcNow
             };
@@ -96,6 +117,8 @@ namespace i_am.ViewModels
             RecipientEmail = string.Empty;
 
             await Shell.Current.DisplayAlert("Sukces", $"Zaproszenie zosta³o wys³ane do {recipient.Username}!", "OK");
+
+            await LoadPendingInvitations();
         }
 
         [RelayCommand]

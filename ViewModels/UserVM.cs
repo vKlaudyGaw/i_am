@@ -14,7 +14,10 @@ namespace i_am.ViewModels
         public ObservableCollection<User> Users { get; set; } = [];
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(HasCurrentUser))]
         private User? currentUser;
+
+        public bool HasCurrentUser => CurrentUser != null;
 
         [ObservableProperty]
         private bool isLoading;
@@ -54,7 +57,8 @@ namespace i_am.ViewModels
         [RelayCommand]
         public async Task GoToCheckIn()
         {
-            await Shell.Current.GoToAsync(nameof(Pages.CheckInPage));
+            await Shell.Current.DisplayAlert("Info", "Codzienna aktywnoœæ - do zaimplementowania", "OK");
+            //await Shell.Current.GoToAsync(nameof(Pages.CheckInPage));
         }
 
         [RelayCommand]
@@ -87,8 +91,8 @@ namespace i_am.ViewModels
         {
             if (CurrentUser == null) return;
 
-            // TODO: Implementacja alertu pomocy z powiadomieniami push
-            await AppShell.DisplaySnackbarAsync("Twoi opiekunowie zostali powiadomieni!");
+            await Shell.Current.DisplayAlert("Info", "Alert - do zaimplementowania", "OK");
+            //await AppShell.DisplaySnackbarAsync("Twoi opiekunowie zostali powiadomieni!");
         }
 
         [RelayCommand]

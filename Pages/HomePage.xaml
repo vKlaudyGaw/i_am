@@ -7,15 +7,15 @@
              Title="Strona główna">
 
     <Grid>
-        <!-- Loading - pokazuj gdy IsLoading = true -->
-        <ActivityIndicator IsRunning="{Binding IsLoading}"
-                           IsVisible="{Binding IsLoading}"
+        <!-- Loading - pokazuj gdy IsLoading = true LUB brak CurrentUser -->
+        <ActivityIndicator IsRunning="True"
+                           IsVisible="{Binding HasCurrentUser, Converter={StaticResource InverseBoolConverter}}"
                            HorizontalOptions="Center"
                            VerticalOptions="Center"
                            Color="{StaticResource Primary}" />
 
-        <!-- Zawartość - pokazuj gdy IsLoading = false -->
-        <ScrollView IsVisible="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}">
+        <!-- Zawartość - pokazuj tylko gdy CurrentUser != null -->
+        <ScrollView IsVisible="{Binding HasCurrentUser}">
             <VerticalStackLayout Padding="20" Spacing="20">
 
                 <Frame BackgroundColor="{StaticResource Primary}" Padding="20" CornerRadius="10">

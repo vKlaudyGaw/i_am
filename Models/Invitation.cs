@@ -23,6 +23,9 @@ namespace i_am.Models
         public string? RecipientId { get; set; }
 
         [FirestoreProperty]
+        public string? RecipientName { get; set; }
+
+        [FirestoreProperty]
         public bool SenderIsCaregiver { get; set; }
 
         [FirestoreProperty]
@@ -31,11 +34,13 @@ namespace i_am.Models
         [FirestoreProperty]
         public DateTime CreatedAt { get; set; }
 
+        public bool IsSentByMe { get; set; }
         public bool IsPending => IsAccepted == null;
         public bool IsRejected => IsAccepted == false;
-
         public string InviteTypeText => SenderIsCaregiver 
             ? "Chce zostaæ Twoim opiekunem" 
             : "Chce, ¿ebyœ zosta³ jego opiekunem";
+
+        
     }
 }

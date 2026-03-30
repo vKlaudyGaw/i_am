@@ -121,22 +121,39 @@ namespace i_am.Services
             await db!.Collection("Invitations").AddAsync(invitation);
         }
 
-        public async Task<List<Invitation>> GetPendingInvitations(string recipientId)
+        public async Task<List<Invitation>> GetPendingInvitations(string userId)
         {
             await SetupFirestore();
-            var data = await db!.Collection("Invitations")
-                .WhereEqualTo("RecipientId", recipientId)
+            
+            // Pobierz zaproszenia otrzymane
+            var receivedData = await db!.Collection("Invitations")
+                .WhereEqualTo("RecipientId", userId)
                 .WhereEqualTo("IsAccepted", null)
                 .GetSnapshotAsync();
             
-            return data.Documents
-                .Select(doc =>
-                {
-                    var invitation = doc.ConvertTo<Invitation>();
-                    invitation.Id = doc.Id;
-                    return invitation;
-                })
-                .ToList();
+            // Pobierz zaproszenia wys³ane
+            var sentData = await db!.Collection("Invitations")
+                .WhereEqualTo("SenderId", userId)
+                .WhereEqualTo("IsAccepted", null)
+                .GetSnapshotAsync();
+            
+            var allInvitations = new List<Invitation>();
+
+            foreach (var doc in receivedData.Documents)
+            {
+                var invitation = doc.ConvertTo<Invitation>();
+                invitation.Id = doc.Id;
+                allInvitations.Add(invitation);
+            }
+
+            foreach (var doc in sentData.Documents)
+            {
+                var invitation = doc.ConvertTo<Invitation>();
+                invitation.Id = doc.Id;
+                allInvitations.Add(invitation);
+            }
+
+            return allInvitations;
         }
 
         public async Task UpdateInvitation(Invitation invitation)
@@ -148,6 +165,30 @@ namespace i_am.Services
             
             await SetupFirestore();
             await db!.Collection("Invitations").Document(invitation.Id).SetAsync(invitation);
+        }
+
+        public async Task<bool> HasPendingInvitation(string senderId, string recipientId)
+        {
+            await SetupFirestore();
+            
+            // SprawdŸ zaproszenie od senderId do recipientId
+            var sentInvitations = await db!.Collection("Invitations")
+                .WhereEqualTo("SenderId", senderId)
+                .WhereEqualTo("RecipientId", recipientId)
+                .WhereEqualTo("IsAccepted", null)
+                .GetSnapshotAsync();
+            
+            if (sentInvitations.Documents.Count > 0)
+                return true;
+            
+            // SprawdŸ zaproszenie od recipientId do senderId
+            var receivedInvitations = await db!.Collection("Invitations")
+                .WhereEqualTo("SenderId", recipientId)
+                .WhereEqualTo("RecipientId", senderId)
+                .WhereEqualTo("IsAccepted", null)
+                .GetSnapshotAsync();
+            
+            return receivedInvitations.Documents.Count > 0;
         }
         #endregion
 

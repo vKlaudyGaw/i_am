@@ -11,6 +11,8 @@ namespace i_am.Pages
         private readonly FirebaseAuthClient _authClient;
         private readonly FirestoreService _firestoreService;
 
+        private bool _registrationCompleted;
+
         [ObservableProperty]
         private string _email;
 
@@ -36,6 +38,7 @@ namespace i_am.Pages
         {
             _authClient = authClient;
             _firestoreService = firestoreService;
+            _registrationCompleted = true; 
         }
 
         [RelayCommand]
@@ -69,6 +72,8 @@ namespace i_am.Pages
 
                 await _firestoreService.InsertUserWithId(newUser);
 
+                _registrationCompleted = true;
+
                 await Shell.Current.GoToAsync("//HomePage");
             }
             catch (FirebaseAuthException ex)
@@ -94,7 +99,22 @@ namespace i_am.Pages
         [RelayCommand]
         private async Task NavigateSignIn()
         {
+            _registrationCompleted = true; 
             await Shell.Current.GoToAsync("//SignIn");
+        }
+
+        public void ClearFieldsIfNeeded()
+        {
+            if (_registrationCompleted)
+            {
+                Email = string.Empty;
+                Username = string.Empty;
+                Password = string.Empty;
+                PhoneNumber = string.Empty;
+                IsCaregiver = false;
+                ErrorMessage = string.Empty;
+                _registrationCompleted = false;
+            }
         }
     }
 }
