@@ -31,16 +31,21 @@ namespace i_am.Pages
             _authClient = authClient;
             _firestoreService = firestoreService;
 
-            // Sprawdzenie czy użytkownik jest już zalogowany
-            CheckAutoLogin();
+            // NIE wywołuj nawigacji w konstruktorze - przenieś do OnAppearing
         }
 
-        private async void CheckAutoLogin()
+        // Zmień metodę CheckAutoLoginAsync aby zwracała bool
+        public async Task<bool> CheckAutoLoginAsync()
         {
-            if (_authClient.User != null)
+            // Poczekaj na pełną inicjalizację Shell
+            await Task.Delay(100);
+            
+            if (_authClient.User != null && Shell.Current != null)
             {
                 await Shell.Current.GoToAsync("//HomePage");
+                return true;
             }
+            return false;
         }
 
         [RelayCommand]
@@ -59,7 +64,6 @@ namespace i_am.Pages
 
                 await _authClient.SignInWithEmailAndPasswordAsync(Email, Password);
 
-                // Aktualizacja LastActiveAt w Firestore
                 var user = await _firestoreService.GetUserByEmail(Email);
                 if (user != null)
                 {
@@ -97,6 +101,15 @@ namespace i_am.Pages
         private async Task NavigateSignUp()
         {
             await Shell.Current.GoToAsync("//SignUp");
+        }
+
+        
+        //czyszczenie pól
+        public void ClearFields()
+        {
+            Email = string.Empty;
+            Password = string.Empty;
+            ErrorMessage = string.Empty;
         }
     }
 }

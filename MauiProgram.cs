@@ -35,7 +35,10 @@ namespace i_am
             builder.Logging.AddDebug();
 #endif
 
-            // Firebase Auth Client
+            // Ścieżka do przechowywania sesji użytkownika
+            var userRepositoryPath = Path.Combine(FileSystem.AppDataDirectory, "I_am");
+
+            // Firebase Auth Client z persystencją sesji
             builder.Services.AddSingleton(new FirebaseAuthClient(new FirebaseAuthConfig()
             {
                 ApiKey = "AIzaSyC5ScBBMofsRGs9qtLIfGDAY_gXr7peUD0",
@@ -43,8 +46,8 @@ namespace i_am
                 Providers =
                 [
                     new EmailProvider()
-                ]//,
-                //UserRepository = new FileUserRepository("I_am")
+                ],
+                UserRepository = new FileUserRepository(userRepositoryPath)
             }));
 
             // Services
@@ -59,13 +62,14 @@ namespace i_am
 
             // ViewModels
             builder.Services.AddTransient<SampleVM>();
-            builder.Services.AddTransient<UserVM>();
+            builder.Services.AddSingleton<UserVM>();
             builder.Services.AddTransient<CheckInVM>();
             builder.Services.AddTransient<InvitationVM>();
             builder.Services.AddTransient<RelationshipVM>();
             builder.Services.AddTransient<CalendarVM>();
 
             // Pages
+            builder.Services.AddTransient<HomePage>();
             builder.Services.AddTransient<CheckInPage>();
             builder.Services.AddTransient<InvitationsPage>();
             builder.Services.AddTransient<RelationshipsPage>();

@@ -60,7 +60,8 @@ namespace i_am.ViewModels
         [RelayCommand]
         public async Task GoToCalendar()
         {
-            await Shell.Current.GoToAsync(nameof(Pages.CalendarPage));
+            await Shell.Current.DisplayAlert("Info", "Kalendarz - do zaimplementowania", "OK");
+            //await Shell.Current.GoToAsync(nameof(Pages.CalendarPage));
         }
 
         [RelayCommand]
